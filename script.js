@@ -61,13 +61,13 @@ let hasAnswered = false;
 function updateClock() {
   const now = new Date();
   const timeString = now.toLocaleTimeString('sv-SE');
-  const dateString = now.toLocaleDateString('sv-SE', { 
-    weekday: 'long', 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+  const dateString = now.toLocaleDateString('sv-SE', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
   });
-  
+
   document.getElementById('clock-time').textContent = timeString;
   document.getElementById('clock-date').textContent = dateString.charAt(0).toUpperCase() + dateString.slice(1);
 }
@@ -94,7 +94,7 @@ const translations = {
 function changeLanguage() {
   currentLanguage = currentLanguage === 'sv' ? 'en' : 'sv';
   const lang = translations[currentLanguage];
-  
+
   document.querySelector('h1').textContent = lang.title;
   document.querySelector('.traffic-header h2').textContent = lang.traffic;
   document.getElementById('langBtn').textContent = currentLanguage.toUpperCase();
@@ -133,25 +133,25 @@ async function fetchNews() {
 function displayNews(articles) {
   const newsGrid = document.getElementById('newsGrid');
   newsGrid.innerHTML = '';
-  
+
   articles.forEach(article => {
     const newsCard = document.createElement('div');
     newsCard.className = 'news-card';
-    newsCard.onclick = function() {
+    newsCard.onclick = function () {
       openNewsModal(article);
     };
-    
+
     const title = article.title || 'Ingen rubrik';
     const time = new Date(article.publishedAt).toLocaleTimeString('sv-SE', {
       hour: '2-digit',
       minute: '2-digit'
     });
-    
+
     newsCard.innerHTML = `
       <div class="news-title">${title}</div>
       <div class="news-time">${time}</div>
     `;
-    
+
     newsGrid.appendChild(newsCard);
   });
 }
@@ -193,15 +193,15 @@ function showQuestion() {
   // Visa frågevyn och dölj resultatvyn
   document.getElementById('quizQuestionView').style.display = 'block';
   document.getElementById('quizResultView').style.display = 'none';
-  
+
   const question = quizQuestions[currentQuestion];
   document.getElementById('quizProgress').textContent = `Fråga ${currentQuestion + 1}/${quizQuestions.length}`;
   document.getElementById('quizQuestionText').textContent = question.question;
-  
+
   // Skapa svarsalternativ
   const choicesDiv = document.getElementById('quizChoices');
   choicesDiv.innerHTML = '';
-  
+
   question.choices.forEach((choice, index) => {
     const label = document.createElement('label');
     label.className = 'quiz-option';
@@ -209,7 +209,7 @@ function showQuestion() {
       <input type="radio" name="answer" value="${index}">
       <span>${choice}</span>
     `;
-    label.onclick = function() {
+    label.onclick = function () {
       if (!hasAnswered) {
         // Ta bort selected från alla
         document.querySelectorAll('.quiz-option').forEach(opt => {
@@ -222,7 +222,7 @@ function showQuestion() {
     };
     choicesDiv.appendChild(label);
   });
-  
+
   hasAnswered = false;
   document.getElementById('quizAdvanceBtn').disabled = true;
   document.getElementById('quizAdvanceBtn').textContent = 'Bekräfta svar';
@@ -239,15 +239,15 @@ function checkAnswer() {
     }
     return;
   }
-  
+
   // Kontrollera svaret
   const selected = document.querySelector('input[name="answer"]:checked');
   if (!selected) return;
-  
+
   const answer = parseInt(selected.value);
   const question = quizQuestions[currentQuestion];
   const options = document.querySelectorAll('.quiz-option');
-  
+
   // Visa rätt och fel svar
   options.forEach((option, index) => {
     if (index === question.correctIndex) {
@@ -256,11 +256,11 @@ function checkAnswer() {
       option.classList.add('incorrect');
     }
   });
-  
+
   if (answer === question.correctIndex) {
     score++;
   }
-  
+
   hasAnswered = true;
   document.getElementById('quizAdvanceBtn').textContent = 'Nästa';
 }
@@ -271,6 +271,124 @@ function showResult() {
   document.getElementById('quizScoreSummary').textContent = `Du fick ${score} av ${quizQuestions.length} rätt!`;
 }
 
+
+// Minimal bussdemo: 4 synliga, unika minuter, 1 "min" var 10:e sekund
+function startSimpleBusDemo() {
+  const TICK_MS = 10000; // 10 s = 1 "minut"
+  const MIN_GAP = 2;     // minst 2 min mellan synliga avgångar
+
+  const container = document.querySelector('.traffic-cards');
+  if (!container) return;
+
+  const allCards = Array.from(container.querySelectorAll('.traffic-card'));
+  if (allCards.length === 0) return;
+
+  // Kör bara EN timer
+  if (window.__busTimer) {
+    clearInterval(window.__busTimer);
+    window.__busTimer = null;
+  }
+
+  // Hjälpare
+  const readMinutes = (card) => {
+    const txt = card.querySelector('.time-value')?.textContent || '';
+    const n = parseInt(txt, 10);
+    return isNaN(n) ? 0 : n;
+  };
+  const writeMinutes = (card, m) => {
+    card.querySelector('.time-value').textContent = `${m} min`;
+  };
+
+  // Init: tydlig start med större luckor
+  const startBase = [5, 9, 13, 17];
+  allCards.slice(0, 4).forEach((card, i) => {
+    writeMinutes(card, startBase[i % startBase.length]);
+    const labelEl = card.querySelector('.time-label');
+    if (labelEl && !labelEl.textContent.trim()) labelEl.textContent = 'I tid';
+  });
+
+  // Säkerställ minst MIN_GAP mellan topp-4 (enkelt, uppåtjustering)
+  function enforceGapOnTop4() {
+    const top4 = allCards.slice(0, 4);
+    let prev = null;
+    top4.forEach(card => {
+      let m = readMinutes(card);
+      if (prev !== null && (m - prev) < MIN_GAP) {
+        m = prev + MIN_GAP;
+        writeMinutes(card, m);
+      }
+      prev = m;
+    });
+  }
+
+  // Sortera efter minuter och rendera i ordning
+  function sortAndRender() {
+    allCards.sort((a, b) => readMinutes(a) - readMinutes(b));
+    enforceGapOnTop4();
+    allCards.forEach(c => container.appendChild(c)); // CSS döljer >4
+  }
+
+  // Som ovan men med mjuk "arrive" för topp-4
+  function sortRenderWithArrive() {
+    sortAndRender();
+    const first4 = allCards.slice(0, 4);
+    first4.forEach(c => {
+      c.classList.add('arriving');
+      void c.offsetWidth; // reflow
+      requestAnimationFrame(() => {
+        c.classList.add('show');
+        setTimeout(() => c.classList.remove('arriving', 'show'), 400);
+      });
+    });
+  }
+
+  // Första render
+  sortAndRender();
+
+  // Tick-loop
+  window.__busTimer = setInterval(() => {
+    let hadDeparture = false;
+
+    allCards.forEach(card => {
+      const labelEl = card.querySelector('.time-label');
+      let m = readMinutes(card);
+
+      if (m > 0) {
+        writeMinutes(card, m - 1);
+      } else {
+        // Avgår nu → glid ut vänster
+        card.querySelector('.time-value').textContent = 'Avgår';
+        if (labelEl) labelEl.textContent = 'I tid';
+        card.classList.add('departing');
+        hadDeparture = true;
+
+        // Efter kort paus: ge ny tid (längre bort), ev. försening, sortera mjukt in
+        setTimeout(() => {
+          // Ny tid 15–25 min; litet förseningstillägg ibland
+          let next = Math.floor(Math.random() * 11) + 15; // 15–25
+          const delayed = Math.random() < 0.2;
+          if (delayed) next += Math.floor(Math.random() * 4) + 2; // +2–5
+
+          writeMinutes(card, next);
+          if (labelEl) labelEl.textContent = delayed ? 'Försenad' : 'I tid';
+          card.classList.remove('departing');
+
+          sortRenderWithArrive();
+        }, 400);
+      }
+    });
+
+    // Ingen avgång denna tick → snabb uppdatering + gapgaranti
+    if (!hadDeparture) sortAndRender();
+  }, TICK_MS);
+}
+
+
+
+
+
+
+
 // Event listeners
 document.getElementById('langBtn').addEventListener('click', changeLanguage);
 document.getElementById('newsModalClose').addEventListener('click', closeNewsModal);
@@ -279,8 +397,10 @@ document.getElementById('quizCloseBtn').addEventListener('click', closeQuizModal
 document.getElementById('quizAdvanceBtn').addEventListener('click', checkAnswer);
 
 // Starta allt när sidan laddas
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', function () {
   updateClock();
   setInterval(updateClock, 1000);
   fetchNews();
+  startSimpleBusDemo();
+
 });

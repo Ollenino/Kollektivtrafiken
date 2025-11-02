@@ -115,6 +115,31 @@ body {
   margin-top: 5px;
 }
 
+.traffic-cards .traffic-card:nth-child(n+5) { display: none; }
+
+/* Smidig animation för busskorten */
+.traffic-card {
+  transition: transform 0.35s ease, opacity 0.35s ease;
+  will-change: transform, opacity;
+}
+
+/* När en buss avgår: glid ut åt vänster */
+.traffic-card.departing {
+  transform: translateX(-120%);
+  opacity: 0;
+}
+
+/* När ett kort kommer in i topp 4: mjuk fade/slide in */
+.traffic-card.arriving {
+  transform: translateX(16px);
+  opacity: 0;
+}
+.traffic-card.arriving.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+
 /* Section styling */
 .section {
   background: white;
