@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kollektivtrafik Info</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <h1>Kollektivtrafik Info</h1>
+    <div class="header-clock">
+      <div id="clock-time">--:--:--</div>
+      <div id="clock-date"></div>
+    </div>
+    <button class="header-btn" id="langBtn">SV</button>
+  </header>
+
+  <main>
+    <!-- Traffic info section -->
+    <section class="traffic-section">
+      <div class="traffic-header">
+        <h2>Trafikinformation</h2>
+      </div>
+      <div class="traffic-cards">
+        <div class="traffic-card">
+          <div>
+            <div class="bus-number">47</div>
+            <div class="bus-destination">Centralen</div>
+          </div>
+          <div>
+            <div class="time-value">3 min</div>
+            <div class="time-label">I tid</div>
+          </div>
+        </div>
+        <div class="traffic-card">
+          <div>
+            <div class="bus-number">T13</div>
+            <div class="bus-destination">Norsborg</div>
+          </div>
+          <div>
+            <div class="time-value">5 min</div>
+            <div class="time-label">I tid</div>
+          </div>
+        </div>
+        <div class="traffic-card">
+          <div>
+            <div class="bus-number">62</div>
+            <div class="bus-destination">Karolinska</div>
+          </div>
+          <div>
+            <div class="time-value">12 min</div>
+            <div class="time-label">Försenad</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- News section -->
+    <section class="section">
+      <h2>Senaste Nyheterna</h2>
+      <div class="news-grid" id="newsGrid">
+        <div class="news-card">
+          <div class="news-title">Laddar nyheter...</div>
+          <div class="news-time"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quiz section -->
+    <section class="section game-section">
+      <h2>Spela & Lär</h2>
+      <button id="quizOpenBtn" class="header-btn">Starta Quiz</button>
+    </section>
+
+    <!-- Local info section -->
+    <section class="section">
+      <h2>Lokal Information</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-title">Centralstationen</div>
+          <div>
+            <span class="distance-badge">200m</span>
+            <span class="walk-time">• 3 min</span>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-title">Stadsbibliotek</div>
+          <div>
+            <span class="distance-badge">500m</span>
+            <span class="walk-time">• 7 min</span>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-title">Turistinfo</div>
+          <div>
+            <span class="distance-badge">350m</span>
+            <span class="walk-time">• 5 min</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- News modal -->
+  <div class="modal-backdrop" id="newsModal">
+    <div class="modal">
+      <button class="modal-close" id="newsModalClose">✕</button>
+      <h3 id="newsModalTitle"></h3>
+      <p class="modal-meta" id="newsModalTime"></p>
+      <div id="newsModalBody"></div>
+    </div>
+  </div>
+
+  <!-- Quiz modal -->
+  <div class="modal-backdrop" id="quizModal">
+    <div class="modal">
+      <button class="modal-close" id="quizCloseBtn">✕</button>
+      <div id="quizQuestionView">
+        <div class="quiz-status" id="quizProgress">Fråga 1/10</div>
+        <h3>Quiz</h3>
+        <p id="quizQuestionText"></p>
+        <div class="quiz-choices" id="quizChoices"></div>
+        <div class="quiz-nav">
+          <button class="quiz-advance" id="quizAdvanceBtn" disabled>Bekräfta svar</button>
+        </div>
+      </div>
+      <div id="quizResultView" style="display: none;">
+        <h3>Resultat</h3>
+        <p id="quizScoreSummary"></p>
+        <button class="quiz-advance" onclick="closeQuizModal()">Stäng</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
