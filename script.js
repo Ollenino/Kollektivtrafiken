@@ -289,17 +289,22 @@ function startSimpleBusDemo() {
     window.__busTimer = null;
   }
 
-  // Hjälpare
+  // Hjälpfunktioner
   const readMinutes = (card) => {
     const txt = card.querySelector('.time-value')?.textContent || '';
     const n = parseInt(txt, 10);
     return isNaN(n) ? 0 : n;
   };
   const writeMinutes = (card, m) => {
-    card.querySelector('.time-value').textContent = `${m} min`;
+    // 👉 Här ändrar vi hur 0 visas
+    if (m <= 0) {
+      card.querySelector('.time-value').textContent = 'Avgår nu';
+    } else {
+      card.querySelector('.time-value').textContent = `${m} min`;
+    }
   };
 
-  // Init: tydlig start med större luckor
+  // Initiera start med större mellanrum
   const startBase = [5, 9, 13, 17];
   allCards.slice(0, 4).forEach((card, i) => {
     writeMinutes(card, startBase[i % startBase.length]);
@@ -307,7 +312,7 @@ function startSimpleBusDemo() {
     if (labelEl && !labelEl.textContent.trim()) labelEl.textContent = 'I tid';
   });
 
-  // Säkerställ minst MIN_GAP mellan topp-4 (enkelt, uppåtjustering)
+  // Håll 2+ minuters mellanrum mellan de 4 synliga
   function enforceGapOnTop4() {
     const top4 = allCards.slice(0, 4);
     let prev = null;
@@ -321,14 +326,14 @@ function startSimpleBusDemo() {
     });
   }
 
-  // Sortera efter minuter och rendera i ordning
+  // Sortering/rendering
   function sortAndRender() {
     allCards.sort((a, b) => readMinutes(a) - readMinutes(b));
     enforceGapOnTop4();
-    allCards.forEach(c => container.appendChild(c)); // CSS döljer >4
+    allCards.forEach(c => container.appendChild(c));
   }
 
-  // Som ovan men med mjuk "arrive" för topp-4
+  // Mjuk in-animation för de 4 synliga
   function sortRenderWithArrive() {
     sortAndRender();
     const first4 = allCards.slice(0, 4);
@@ -342,7 +347,7 @@ function startSimpleBusDemo() {
     });
   }
 
-  // Första render
+  // Första rendering
   sortAndRender();
 
   // Tick-loop
@@ -353,19 +358,19 @@ function startSimpleBusDemo() {
       const labelEl = card.querySelector('.time-label');
       let m = readMinutes(card);
 
-      if (m > 0) {
+      if (m > 1) {
+        // Vanlig nedräkning
         writeMinutes(card, m - 1);
+      } else if (m === 1) {
+        // När den ska gå nästa tick: visa "Avgår nu"
+        writeMinutes(card, 0);
       } else {
-        // Avgår nu → glid ut vänster
-        card.querySelector('.time-value').textContent = 'Avgår';
-        if (labelEl) labelEl.textContent = 'I tid';
+        // "Avgår nu" → glid ut vänster och få ny tid
         card.classList.add('departing');
         hadDeparture = true;
 
-        // Efter kort paus: ge ny tid (längre bort), ev. försening, sortera mjukt in
         setTimeout(() => {
-          // Ny tid 15–25 min; litet förseningstillägg ibland
-          let next = Math.floor(Math.random() * 11) + 15; // 15–25
+          let next = Math.floor(Math.random() * 11) + 15; // 15–25 min
           const delayed = Math.random() < 0.2;
           if (delayed) next += Math.floor(Math.random() * 4) + 2; // +2–5
 
@@ -378,10 +383,10 @@ function startSimpleBusDemo() {
       }
     });
 
-    // Ingen avgång denna tick → snabb uppdatering + gapgaranti
     if (!hadDeparture) sortAndRender();
   }, TICK_MS);
 }
+
 
 
 

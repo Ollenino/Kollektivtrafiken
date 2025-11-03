@@ -1,361 +1,578 @@
-/* Basic reset */
+:root {
+  --bg-grad-start: #FFE5E8;
+  --bg-grad-end: #FFD7DA;
+  --surface: #FFF;
+  --surface-muted: #F7F7F7;
+  --surface-card: #F3F6F8;
+  --border: #E0E0E0;
+  --border-soft: rgba(0, 0, 0, .05);
+  --text: #232326;
+  --text-2: #6C6C6C;
+  --accent: #E94560;
+  --accent-2: #FF5C74;
+  --comp: #007B83;
+  --comp-2: #00A6A8;
+  --chip: #EEF2F5;
+  --shadow-soft: 0 4px 20px rgba(0, 0, 0, .06);
+  --shadow-card: 0 2px 6px rgba(0, 0, 0, .04);
+  --shadow-card-hover: 0 5px 14px rgba(0, 0, 0, .08);
+}
+
+/* Reset */
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  box-sizing: border-box
 }
 
+html,
 body {
-  font-family: Arial, sans-serif;
-  background: linear-gradient(to bottom right, #ffecd2, #fcb69f);
-  min-height: 100vh;
-  padding: 20px;
-  color: #333;
+  height: 100%
 }
 
-/* Header styling */
-.header {
-  background: linear-gradient(to right, #ff6b6b, #ff8e53);
+img {
+  max-width: 100%;
+  display: block
+}
+
+button {
+  font: inherit
+}
+
+/* Bas */
+body {
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  background-color: #FFE5E8;
+  line-height: 1.55;
   padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 20px;
+}
+
+/* Header */
+.header {
+  background: rgba(255, 255, 255, .85);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
+  box-shadow: var(--shadow-soft);
 }
 
 .header h1 {
-  color: white;
-  font-size: 2rem;
+  font-size: 1.8rem;
+  color: var(--text);
+  letter-spacing: .2px
 }
 
 .header-clock {
-  color: white;
-  text-align: right;
+  display: none !important
 }
 
-#clock-time {
-  font-size: 2rem;
-  font-weight: bold;
-}
-
-#clock-date {
-  font-size: 1rem;
-}
-
+/* Knappar */
 .header-btn {
-  background: orange;
-  border: 2px solid white;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 20px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 700;
   cursor: pointer;
-  font-size: 1rem;
+  transition: filter .2s ease, transform .02s ease-in;
 }
 
 .header-btn:hover {
-  background: rgba(255, 255, 255, 0.5);
+  filter: brightness(1.05)
 }
 
-/* Traffic section */
+.header-btn:active {
+  transform: translateY(1px)
+}
+
+#langBtn,
+.lang-btn {
+  background: linear-gradient(90deg, var(--comp), var(--comp-2));
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter .2s ease, transform .02s ease-in;
+}
+
+#langBtn:hover,
+.lang-btn:hover {
+  filter: brightness(1.06)
+}
+
+#langBtn:active,
+.lang-btn:active {
+  transform: translateY(1px)
+}
+
+/* Trafiksektion */
 .traffic-section {
-  background: linear-gradient(to right, #667eea, #764ba2);
-  padding: 30px;
-  border-radius: 10px;
-  margin-bottom: 20px;
+  position: relative;
+  background: rgba(255, 255, 255, .8);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-soft);
 }
 
-.traffic-header h2 {
-  color: white;
-  margin-bottom: 20px;
-  font-size: 1.8rem;
+.traffic-section::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 40px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, .6), transparent);
+  border-radius: 14px 14px 0 0;
+  pointer-events: none;
 }
 
-.traffic-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 15px;
-}
-
-.traffic-card {
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  padding: 20px;
-  border-radius: 10px;
+.traffic-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
+  margin-bottom: 16px
+}
+
+.traffic-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text);
+  border-left: 4px solid var(--accent);
+  padding-left: 10px;
+  font-weight: 700
+}
+
+/* Klocka i trafikheadern */
+.clock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 999px;
+  color: var(--text);
+  font-family: 'Orbitron', system-ui, sans-serif;
+  font-size: .95rem;
+}
+
+.clock .dot {
+  opacity: .6
+}
+
+/* Busslista */
+.traffic-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px
+}
+
+.traffic-cards .traffic-card:nth-child(n+5) {
+  display: none
+}
+
+/* visa bara 4 närmast */
+
+.traffic-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform .25s ease, opacity .35s ease, box-shadow .2s ease;
+  will-change: transform, opacity;
+  box-shadow: var(--shadow-card);
+}
+
+.traffic-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card-hover)
 }
 
 .bus-number {
-  color: white;
-  font-size: 1.5rem;
-  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 800;
+  display: inline-block;
+  min-width: 86px;
+  text-align: center
 }
 
 .bus-destination {
-  color: white;
-  font-size: 1rem;
+  font-size: .95rem;
+  color: var(--text-2);
+  margin-top: 6px
 }
 
 .time-value {
-  color: white;
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 1.2rem;
+  font-weight: 800;
   text-align: right;
+  color: var(--text)
 }
 
 .time-label {
-  background: rgba(255, 255, 255, 0.3);
-  color: white;
-  padding: 5px 10px;
-  border-radius: 10px;
-  font-size: 0.9rem;
+  margin-top: 6px;
   display: inline-block;
-  margin-top: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--chip);
+  color: var(--text-2);
+  font-size: .85rem;
+  border: 1px solid var(--border)
 }
 
-.traffic-cards .traffic-card:nth-child(n+5) { display: none; }
-
-/* Smidig animation för busskorten */
-.traffic-card {
-  transition: transform 0.35s ease, opacity 0.35s ease;
-  will-change: transform, opacity;
+/* Busslinjefärger */
+.bus-1 {
+  background: #0072bc
 }
 
-/* När en buss avgår: glid ut åt vänster */
+.bus-2 {
+  background: #ef3e36
+}
+
+.bus-3 {
+  background: #fcb900;
+  color: #232326
+}
+
+.bus-4 {
+  background: #38b000
+}
+
+.bus-5 {
+  background: #ff6b6b
+}
+
+.bus-6 {
+  background: #6f42c1
+}
+
+.bus-7 {
+  background: #ff8c00;
+  color: #232326
+}
+
+.bus-8 {
+  background: #009688
+}
+
+.bus-9 {
+  background: #3f51b5
+}
+
+/* Avgångsanimationer */
 .traffic-card.departing {
   transform: translateX(-120%);
-  opacity: 0;
+  opacity: 0
 }
 
-/* När ett kort kommer in i topp 4: mjuk fade/slide in */
 .traffic-card.arriving {
   transform: translateX(16px);
-  opacity: 0;
+  opacity: 0
 }
+
 .traffic-card.arriving.show {
   transform: translateX(0);
   opacity: 1;
+  animation: pop .4s ease
 }
 
+@keyframes pop {
+  0% {
+    transform: scale(.96);
+    opacity: 0
+  }
 
-/* Section styling */
+  70% {
+    transform: scale(1.02);
+    opacity: 1
+  }
+
+  100% {
+    transform: scale(1)
+  }
+}
+
+/* Vanliga sektioner */
 .section {
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  margin-bottom: 20px;
+  position: relative;
+  background: rgba(255, 255, 255, .85);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-soft);
 }
 
 .section h2 {
-  font-size: 1.8rem;
-  margin-bottom: 20px;
+  font-size: 1.5rem;
+  margin-bottom: 14px;
+  color: var(--text);
+  border-left: 4px solid var(--accent);
+  padding-left: 10px;
+  font-weight: 700
 }
 
-/* News cards */
+/* News */
 .news-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 15px;
+  gap: 20px
 }
 
 .news-card {
-  background: linear-gradient(to bottom, #fff5e6, #ffe6cc);
-  border: 2px solid #ffd9a6;
-  padding: 20px;
-  border-radius: 10px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: transform .15s ease, box-shadow .2s ease;
+  box-shadow: var(--shadow-card)
 }
 
 .news-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover)
 }
 
 .news-title {
-  font-size: 1.1rem;
-  font-weight: bold;
-  margin-bottom: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px
 }
 
 .news-time {
-  color: #999;
-  font-size: 0.9rem;
+  color: var(--text-2);
+  font-size: .9rem
 }
 
-/* Quiz section */
+/* Tvåspalts-layout: Spela & Lär + Lokal Information */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 20px;
+  align-items: start
+}
+
+/* Spela & Lär: rubrik vänster, knapp centrerad */
 .game-section {
-  background: linear-gradient(to bottom, #ffeef8, #ffe0f0);
-  border: 2px solid #ffc8e8;
-  text-align: center;
+  text-align: left;
+  padding: 18px 20px
 }
 
-/* Modal styling */
+.game-section h2 {
+  margin-bottom: 8px
+}
+
+.game-section .header-btn {
+  display: block;
+  margin: 10px auto 0
+}
+
+/* Info */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px
+}
+
+.info-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 18px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: var(--shadow-card)
+}
+
+.info-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: var(--text)
+}
+
+.distance-badge {
+  background: linear-gradient(90deg, var(--comp), var(--comp-2));
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  display: inline-block
+}
+
+.walk-time {
+  color: var(--text-2);
+  margin-left: 10px
+}
+
+/* Modal */
 .modal-backdrop {
   display: none;
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  inset: 0;
+  background: rgba(0, 0, 0, .45);
+  z-index: 1000
 }
 
 .modal-backdrop.open {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center
 }
 
 .modal {
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 24px;
+  border-radius: 12px;
   max-width: 600px;
   width: 90%;
   max-height: 80vh;
   overflow-y: auto;
   position: relative;
+  box-shadow: var(--shadow-soft)
 }
 
 .modal-close {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #ddd;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
+  background: #EFEFEF;
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: 1rem
 }
 
 .modal-close:hover {
-  background: #ccc;
+  background: #E8E8E8
 }
 
 .modal h3 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+  color: var(--text)
 }
 
 .modal-meta {
-  color: #888;
-  margin-bottom: 15px;
+  color: var(--text-2);
+  margin-bottom: 12px
 }
 
-/* Quiz styling */
-
-.quiz-status {
-  text-align: center;
-  font-weight: bold;
-  margin-bottom: 15px;
+body.modal-open {
+  overflow: hidden
 }
 
-.quiz-choices {
-  margin: 20px 0;
+/* ===== Kompakt väderkort (passar exakt i tomrummet) ===== */
+.weather-section{
+  padding:16px 18px;                 /* lite tajtare än standard .section */
+}
+.weather-section h2{
+  margin-bottom:8px;                  /* liten rubrikmarginal */
+  font-size:1.2rem;                   /* lite mindre rubrik så kortet blir lägre */
 }
 
-.quiz-option {
-  background: white;
-  border: 2px solid #ddd;
-  padding: 15px;
+.weather-compact{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  min-height:86px;                    /* kompakt höjd, justera vid behov (80–100) */
+}
+
+.wx-icon{
+  font-size:1.8rem;
+  line-height:1;
+  filter:saturate(0.9);
+}
+
+.wx-main{
+  display:flex;
+  flex-direction:column;
+  min-width:96px;
+}
+.wx-temp{
+  font-size:1.6rem;
+  font-weight:700;
+  color:var(--accent);
+  line-height:1.1;
+}
+.wx-cond{
+  font-size:.95rem;
+  color:var(--text-2);
+}
+
+.wx-meta{
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+  color:var(--text-2);
+  font-size:.95rem;
+}
+.wx-meta .dot{ opacity:.6; }
+
+.quiz-status{
+  text-align:center;
+  font-weight:700;
+  margin-bottom:12px;
+  color:var(--text);
+}
+
+.quiz-choices{ margin:16px 0; }
+
+.quiz-option{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 14px;
   margin-bottom: 10px;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 10px;
-  transition: border-color 0.2s;
+  transition: border-color .15s ease, background .15s ease, box-shadow .2s ease;
+  box-shadow: var(--shadow-card);
 }
+.quiz-option:hover{ border-color:#C9D3DC; background:#FAFBFC; }
+.quiz-option input{ width:20px; height:20px; }
+.quiz-option.selected{ border-color: var(--comp); background:#F0FBFC; }
+.quiz-option.correct{ border-color:#45b36b; background:#effaf3; }
+.quiz-option.incorrect{ border-color:#d64545; background:#fdecec; }
 
-.quiz-option:hover {
-  border-color: #999;
-}
+.quiz-nav{ text-align:center; margin-top:16px; }
 
-.quiz-option input {
-  width: 20px;
-  height: 20px;
-}
-
-.quiz-option.selected {
-  border-color: #6a9cf0;
-  background: #e9f1ff;
-}
-
-.quiz-option.correct {
-  border-color: #45b36b;
-  background: #effaf3;
-}
-
-.quiz-option.incorrect {
-  border-color: #d64545;
-  background: #fdecec;
-}
-
-.quiz-nav {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.quiz-advance {
-  background: #1f6feb;
+.quiz-advance{
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
   border: none;
-  color: white;
-  padding: 12px 30px;
-  border-radius: 25px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.quiz-advance:hover {
-  background: #215bd6;
-}
-
-.quiz-advance:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
-
-/* Info cards */
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 15px;
-}
-
-.info-card {
-  background: white;
-  border: 2px solid #ffe0b3;
-  padding: 20px;
+  color:#fff;
+  padding: 12px 24px;
   border-radius: 10px;
-  text-align: center;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 700;
+  transition: filter .2s ease;
 }
+.quiz-advance:hover{ filter: brightness(1.05); }
+.quiz-advance:disabled{ background:#ccc; cursor:not-allowed; }
 
-.info-title {
-  font-size: 1.3rem;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
 
-.distance-badge {
-  background: #ff9966;
-  color: white;
-  padding: 5px 15px;
-  border-radius: 15px;
-  font-weight: bold;
-  display: inline-block;
-}
-
-.walk-time {
-  color: #999;
-  margin-left: 10px;
-}
-
-body.modal-open {
-  overflow: hidden;
-}
