@@ -41,10 +41,11 @@ button {
 
 /* Bas */
 body {
-  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  font-family: 'Rubik', system-ui, sans-serif;
   background-color: #FFE5E8;
   line-height: 1.55;
   padding: 20px;
+  letter-spacing: 0.3px;
 }
 
 /* Header */
@@ -164,7 +165,7 @@ body {
   border-radius: 999px;
   color: var(--text);
   font-family: 'Orbitron', system-ui, sans-serif;
-  font-size: .95rem;
+  font-size: 1.3rem;
 }
 
 .clock .dot {
