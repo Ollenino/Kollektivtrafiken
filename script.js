@@ -137,20 +137,38 @@ function displayNews(articles) {
   articles.forEach(article => {
     const newsCard = document.createElement('div');
     newsCard.className = 'news-card';
-    newsCard.onclick = function () {
-      openNewsModal(article);
-    };
+    newsCard.onclick = function () { openNewsModal(article); };
 
     const title = article.title || 'Ingen rubrik';
     const time = new Date(article.publishedAt).toLocaleTimeString('sv-SE', {
-      hour: '2-digit',
-      minute: '2-digit'
+      hour: '2-digit', minute: '2-digit'
     });
 
+    // ⬇️ Lägg till "Läs mer"-knappen
     newsCard.innerHTML = `
       <div class="news-title">${title}</div>
       <div class="news-time">${time}</div>
+      <button class="news-cta" type="button" aria-label="Läs mer om: ${title}">
+        Läs mer <span aria-hidden="true">→</span>
+      </button>
     `;
+
+    // Gör knappen klickbar utan att bubbla (kortet är också klickbart)
+    const cta = newsCard.querySelector('.news-cta');
+    cta.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openNewsModal(article);
+    });
+
+    // Tillgänglighet: gör kortet fokuserbart + öppna med Enter/Space
+    newsCard.setAttribute('role', 'button');
+    newsCard.setAttribute('tabindex', '0');
+    newsCard.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openNewsModal(article);
+      }
+    });
 
     newsGrid.appendChild(newsCard);
   });

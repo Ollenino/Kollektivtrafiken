@@ -576,4 +576,31 @@ body.modal-open {
 .quiz-advance:hover{ filter: brightness(1.05); }
 .quiz-advance:disabled{ background:#ccc; cursor:not-allowed; }
 
+/* "Läs mer"-knapp i nyhetskort */
+.news-card{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  min-height: 140px;        /* så knappen får egen rad i botten */
+}
+
+.news-cta{
+  align-self: flex-end;   
+  margin-top: auto;         
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  color:#fff;
+  border:none;
+  padding:8px 12px;
+  border-radius:10px;
+  font-weight:700;
+  letter-spacing:.5px;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  transition: filter .2s ease, transform .02s ease-in;
+}
+.news-cta:hover{ filter: brightness(1.05); }
+.news-cta:active{ transform: translateY(1px); }
+.news-card:focus{ outline: 2px solid rgba(233,69,96,.35); outline-offset: 2px; }
 
